@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Build Scans</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <style>
+        body {
+            font-size: .875rem;
+        }
+
+        .sidebar .feather {
+            width: 16px;
+            height: 16px;
+            vertical-align: text-bottom;
+        }
+
+        /*
+         * Sidebar
+         */
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100; /* Behind the navbar */
+            padding: 48px 0 0; /* Height of navbar */
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        }
+
+        .sidebar-sticky {
+            position: relative;
+            top: 0;
+            height: calc(100vh - 48px);
+            padding-top: .5rem;
+            overflow-x: hidden;
+            overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+        }
+
+        @supports ((position: -webkit-sticky) or (position: sticky)) {
+            .sidebar-sticky {
+                position: -webkit-sticky;
+                position: sticky;
+            }
+        }
+
+        .sidebar .nav-link {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .sidebar .nav-link.active {
+            color: #007bff;
+        }
+
+        .sidebar .nav-link:hover .feather,
+        .sidebar .nav-link.active .feather {
+            color: inherit;
+        }
+
+        .sidebar .session-summary {
+            font-size: .7rem;
+        }
+
+        [role="main"] {
+            padding-top: 48px; /* Space for fixed navbar */
+        }
+
+        .navbar-brand {
+            padding-top: .75rem;
+            padding-bottom: .75rem;
+            font-size: 1rem;
+            background-color: rgba(0, 0, 0, .25);
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+        }
+
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/">Maven Build Scans <span
+            class="badge badge-default">beta</span></a>
+    <ul class="navbar-nav px-3">
+    </ul>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column" id="nav">
+                    <li class="nav-item" id="tables">
+                        <a class="nav-link" href="/">
+                            <span data-feather="home"></span>
+                            Dashboard <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        </main>
+    </div>
+</div>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+        integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
+
+<!-- Icons -->
+<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
+
+<!-- Graphs -->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>-->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+    google.charts.load("current", {packages: ["corechart", "timeline"]});
+</script>
+
+<script>
+    var maxRecords = 20;
+
+    function parseDuration(ms) {
+        var ms = parseInt(ms);
+        var seconds = parseInt(ms / 1000);
+        var mins = parseInt(seconds / 60);
+        var hours = parseInt(mins / 60);
+        var days = parseInt(hours / 24);
+
+        if (days > 0) {
+            return days + "d" + hours % 24 + "h";
+        }
+
+        if (hours > 0) {
+            return hours % 24 + "h" + mins % 60 + "m";
+        }
+
+        if (mins > 0) {
+            return mins % 60 + "m" + seconds % 60 + "s"
+        }
+
+        return seconds % 60 + "s";
+    }
+
+    function parseAgo(ms) {
+        return parseDuration(new Date().getTime() - ms) + " ago";
+    }
+
+    function parseStatus(status) {
+        return "<span class=\"badge badge-" + {
+            "PENDING": "default",
+            "SUCCEEDED": "success",
+            "FAILED": "danger"
+        }[status] + "\">" + status + "</span>"
+    }
+
+    $.urlParam = function (name) {
+        var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        if (results == null) {
+            return null;
+        }
+        else {
+            return decodeURI(results[1]) || 0;
+        }
+    };
+    var projectId = $.urlParam("projectId");
+    var sessionId = $.urlParam("sessionId");
+
+    if (projectId != null) {
+        $.getJSON("/api/v1/session-summaries/" + projectId.replace(":", "%3A") + "?r=" + Math.random(), function (data) {
+
+            var items = [];
+            $.each(data, function (id, sessionSummary) {
+                items.push(sessionSummary);
+            });
+
+            var ul = $("<ul/>", {class: "nav flex-column"});
+
+            var table = $("<table/>", {class: "table"});
+
+            table.append("<thead><tr>" +
+                "<th>ID</th>" +
+                "<th>Status</th>" +
+                "<th>Branch</th>" +
+                "<th>Goals</th>" +
+                "<th>User@Hostname</th>" +
+                "<th>Duration</th>" +
+                "</tr></thead>");
+
+            var tbody = $("<tbody/>");
+
+            tbody.appendTo(table);
+
+            $.each(items.sort(function (a, b) {
+                return b.startTime - a.startTime;
+            }).slice(0, maxRecords), function (index, sessionSummary) {
+
+                $("<li/>", {
+                    class: "nav-item session-summary",
+                    html: "<a class='nav-link " + (sessionId === sessionSummary.id ? "active" : "") + "' href='/?projectId=" + projectId + "&sessionId=" + sessionSummary.id + "'><span data-feather='target'></span> "
+                    + parseAgo(parseInt(sessionSummary.startTime)) + "  " + parseStatus(sessionSummary.status) + "</a>"
+                }).appendTo(ul);
+
+
+                tbody.append("<tr>" +
+                    "<td><a href='?projectId=" + projectId + "&sessionId=" + sessionSummary.id + "'><span data-feather='target'></span> " + parseAgo(sessionSummary.startTime) + "</a></td>" +
+                    "<td>" + parseStatus(sessionSummary.status) + "</td>" +
+                    "<td><span data-feather='git-branch'></span> " + sessionSummary.branch + "</td>" +
+                    "<td>" + sessionSummary.goals + "</td>" +
+                    "<td>" + sessionSummary.username + "@" + sessionSummary.hostname + "</td>" +
+                    "<td>" + parseDuration(sessionSummary.duration) + "</td>" +
+                    "</tr>");
+            });
+
+
+            if (sessionId == null) {
+                $("<h1/>", {html: "<span data-feather='package'></span> " + projectId}).appendTo("main");
+                table.appendTo("main");
+            } else {
+                ul.appendTo("#nav");
+            }
+            feather.replace();
+        });
+    }
+
+    $.getJSON("/api/v1/project-summaries?r=" + Math.random(), function (data) {
+        var items = [];
+        $.each(data, function (id, projectSummary) {
+            items.push(projectSummary);
+        });
+        $.each(items.sort(function (a, b) {
+            return b.latestSessionSummary.startTime - a.latestSessionSummary.startTime;
+        }).slice(0, maxRecords), function (index, projectSummary) {
+            $("<li/>", {
+                class: "nav-item",
+                id: projectSummary.id,
+                html: "<a class='nav-link " + (projectId === projectSummary.id ? "active" : "") + "' href=\"?projectId=" + projectSummary.id + "\">" +
+                "<span data-feather='package'></span> " + projectSummary.artifactId + " <span class='session-summary'>" + parseAgo(projectSummary.latestSessionSummary.startTime) + " " + parseStatus(projectSummary.latestSessionSummary.status) + "</span></a>"
+            }).appendTo("#nav");
+        });
+
+        feather.replace();
+    });
+
+    if (sessionId != null) {
+        $.getJSON("/api/v1/session-profiles/" + projectId.replace(":", "%3A") + "/" + sessionId + "?r=" + Math.random(), function (data) {
+
+            $("<h1/>", {html: data.project.artifactId}).appendTo("main");
+            $("<p/>", {
+                html:
+                "<span data-feather='target'></span> " + parseAgo(data.startTime) + " " +
+                parseStatus(data.status) +
+                "<span data-feather='git-branch'></span> " + data.branch + " " +
+                data.username + "@" + data.hostname + " " +
+                parseDuration(data.duration)
+            }).appendTo("main");
+
+            var pre = $("<p/>", {
+                html: "<code>" + data.command + "</code>",
+                "data-toggle": "tooltip",
+                title: "This is only roughly the command executed."
+            });
+            pre.appendTo("main");
+            $(pre).tooltip();
+
+            var significantlyLong = function (a) {
+                // could it render as a single pixel wide on a 2000px wide monitor?
+                return a.duration > 0 && a.duration > data.duration / 2000
+            };
+            var byStartTime = function (a, b) {
+                return b.startTime - b.startTime
+            };
+            var byDuration = function (a, b) {
+                return b.duration - a.duration
+            };
+
+
+            var mojoProfiles = [];
+            var summaryMojoProfiles = {};
+            $.each(data.projectProfiles.filter(significantlyLong).sort(byStartTime), function (index, projectProfile) {
+                $.each(projectProfile.mojoProfiles.filter(significantlyLong).sort(byStartTime), function (index, mojoProfile) {
+                    mojoProfiles.push([
+                        "Thread #" + mojoProfile.threadIndex,
+                        projectProfile.project.artifactId + "/" + mojoProfile.mojo.artifactId + ":" + mojoProfile.executionId + ":" + mojoProfile.goal,
+                        new Date(mojoProfile.startTime),
+                        new Date(mojoProfile.endTime)
+                    ]);
+                    var key = mojoProfile.mojo.artifactId;
+                    if (!summaryMojoProfiles[key]) {
+                        summaryMojoProfiles[key] = {duration: 0};
+                    }
+                    summaryMojoProfiles[key].duration += mojoProfile.duration;
+                });
+            });
+
+
+            $("<div id='timeline' style='height: 500px;'/>").appendTo("main");
+            $("<div id='mojoPieChart' style='height: 500px;'/>").appendTo("main");
+
+            let drawTimeline = function () {
+
+                var container = document.getElementById("timeline");
+                var chart = new google.visualization.Timeline(container);
+                var dataTable = new google.visualization.DataTable();
+
+                dataTable.addColumn({type: 'string', id: 'Thread'});
+                dataTable.addColumn({type: 'string', id: 'Mojo'});
+                dataTable.addColumn({type: 'date', id: 'Start'});
+                dataTable.addColumn({type: 'date', id: 'End'});
+                dataTable.addRows(mojoProfiles);
+                chart.draw(dataTable, {timeline: {singleColor: '#666'}});
+            };
+
+            function drawMojoPieChart() {
+                var array = [
+                    ['Mojo', 'Duration']
+                ];
+
+                $.each(Object.keys(summaryMojoProfiles).map(function (key) {
+                    return {key: key, duration: summaryMojoProfiles[key].duration};
+                }).sort(byDuration), function (index, summaryMojoProfile) {
+                    array.push([summaryMojoProfile.key, summaryMojoProfile.duration]);
+                });
+
+                var data = google.visualization.arrayToDataTable(array);
+
+                var chart = new google.visualization.PieChart(document.getElementById('mojoPieChart'));
+
+                chart.draw(data, {title: 'Mojo Totals'});
+            }
+
+            setTimeout(drawTimeline, 1000);
+            setTimeout(drawMojoPieChart, 1000);
+
+
+            // table
+
+            var table = $("<table/>", {class: "table"});
+
+            table.append("<thead><tr>" +
+                "<th>Project</th>" +
+                "<th>Duration</th>" +
+                "<th>Mojos</th>" +
+                "</tr></thead>");
+
+            var tbody = $("<tbody/>");
+
+            tbody.appendTo(table);
+
+            $.each(data.projectProfiles.filter(significantlyLong).sort(byDuration), function (index, projectProfile) {
+                var mojoProfiles = [];
+                if (projectProfile.phaseProfiles) {
+                    $.each(projectProfile.phaseProfiles, function (indexn, phaseProfile) {
+                        $.each(phaseProfile.mojoProfiles.filter(significantlyLong).sort(byDuration), function (index, mojoProfile) {
+                            mojoProfiles.push(mojoProfile);
+                        });
+                    });
+                } else {
+                    $.each(projectProfile.mojoProfiles.filter(significantlyLong).sort(byDuration), function (index, mojoProfile) {
+                        mojoProfiles.push(mojoProfile);
+                    });
+                }
+
+                tbody.append("<tr>" +
+                    "<td>" + projectProfile.project.artifactId + "</td>" +
+                    "<td>" + parseDuration(projectProfile.duration) + "</td>" +
+                    "<td><table class='table'><tbody>" + mojoProfiles.map(function (mojoProfile) {
+                        return "<tr><td>" + mojoProfile.mojo.artifactId + ":" + mojoProfile.executionId + ":" + mojoProfile.goal + "</td><td>" + parseDuration(mojoProfile.duration) + "</td></tr>";
+                    }).join("") + "</tbody></table></td>" +
+                    "</tr>");
+
+
+            });
+
+            table.appendTo("main");
+
+            feather.replace();
+        });
+    }
+
+</script>
+</body>
+</html>

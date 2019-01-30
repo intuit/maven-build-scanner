@@ -1,0 +1,18 @@
+{
+  "name": "maven-build-scanner",
+  "version": "1.0.0",
+  "description": "A Maven extension that creates scans of builds that allow you to analyse and tune them. Inspired by [Gradle Build Scan](https://scans.gradle.com/s/h2ily574bqb4g).",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.16.3",
+    "mongoose": "^5.2.2"a
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.0"
+  },
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "author": "",
+  "license": "Apache 2.0"
+}
