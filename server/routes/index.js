@@ -11,7 +11,7 @@ const ProjectSummary = mongoose.model("ProjectSummary");
 const SessionSummary = mongoose.model("SessionSummary");
 const SessionProfile = mongoose.model("SessionProfile");
 
-mongoose.connect("mongodb://localhost:27017/build_scans");
+mongoose.connect("mongodb://localhost:27017/build_scans", { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 
 router.get("/", (req, res) => {
