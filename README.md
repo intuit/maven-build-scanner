@@ -54,5 +54,4 @@ You should see the following line in the Maven console output:
 
 # License
 Maven Build Scanner is released under the Apache 2.0 licenses.
-It uses junit, org.eclipse.sisu.inject, and org.eclipse.sisu.plexus which is licensed under EPL 1.0.
-It uses jsr250-api which is licensed under CDDL.
+It uses junit which is licensed under EPL 1.0.
