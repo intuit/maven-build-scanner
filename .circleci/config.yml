@@ -6,3 +6,10 @@ jobs:
     steps:
       - checkout
       - run: mvn install
+  build_server:
+    working_directory: server
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout
+      - run: npm install
