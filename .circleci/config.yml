@@ -12,4 +12,4 @@ jobs:
       - image: circleci/node
     steps:
       - checkout
-      - run: npm install
+      - run: npm install && npm test

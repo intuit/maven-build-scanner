@@ -11,7 +11,8 @@
     "nodemon": "^1.18.0"
   },
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "true"
   },
   "author": "",
   "license": "Apache 2.0"
