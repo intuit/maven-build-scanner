@@ -2,6 +2,8 @@
 
 *Know your build - so you can make it faster*
 
+[![CircleCI](https://circleci.com/gh/intuit/maven-build-scanner.svg?style=svg)](https://circleci.com/gh/intuit/maven-build-scanner)
+
 ## What Is Maven Build Scanner?
 
 Maven Build Scanner is a tool that hooks into Maven builds and produces reports and charts that breakdown the time Maven spent running builds. These reports provide insights into your builds that can be used to tune it. 
