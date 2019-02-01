@@ -1,7 +1,5 @@
 package com.intuit.maven.extensions.build.scanner;
 
-import static java.lang.System.currentTimeMillis;
-
 import com.intuit.maven.extensions.build.scanner.infra.DataStorage;
 import com.intuit.maven.extensions.build.scanner.infra.MongoDataStorage;
 import com.intuit.maven.extensions.build.scanner.model.Mojo;
@@ -10,18 +8,6 @@ import com.intuit.maven.extensions.build.scanner.model.Project;
 import com.intuit.maven.extensions.build.scanner.model.ProjectProfile;
 import com.intuit.maven.extensions.build.scanner.model.SessionProfile;
 import com.intuit.maven.extensions.build.scanner.model.Status;
-import java.io.File;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
-import javax.inject.Named;
-import javax.inject.Singleton;
 import org.apache.maven.eventspy.AbstractEventSpy;
 import org.apache.maven.execution.ExecutionEvent;
 import org.apache.maven.execution.MavenExecutionRequest;
@@ -32,6 +18,22 @@ import org.apache.maven.project.MavenProject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+import java.io.File;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+
+import static java.lang.System.currentTimeMillis;
+
 @Named
 @Singleton
 public class LifecycleProfiler extends AbstractEventSpy {
@@ -40,16 +42,18 @@ public class LifecycleProfiler extends AbstractEventSpy {
   private final ThreadLocal<Integer> threadIndex =
       ThreadLocal.withInitial(threadIndexGenerator::incrementAndGet);
   private final boolean enabled;
+  private final Function<SessionProfile, DataStorage> dataStorageFactory;
   private DataStorage dataStorage;
   private SessionProfile sessionProfile;
   private long lastCheckPoint = currentTimeMillis();
 
   public LifecycleProfiler() {
-    this("1".equals(System.getenv("MAVEN_BUILD_SCANNER")));
+    this("1".equals(System.getenv("MAVEN_BUILD_SCANNER")), MongoDataStorage::new);
   }
 
-  LifecycleProfiler(boolean enabled) {
+  LifecycleProfiler(boolean enabled, Function<SessionProfile, DataStorage> dataStorageFactory) {
     this.enabled = enabled;
+    this.dataStorageFactory = dataStorageFactory;
   }
 
   private static Project project(MavenProject mavenProject) {
@@ -121,7 +125,7 @@ public class LifecycleProfiler extends AbstractEventSpy {
                       new ProjectProfile(childProject, Status.PENDING));
                 });
 
-            dataStorage = new MongoDataStorage(sessionProfile);
+            dataStorage = dataStorageFactory.apply(sessionProfile);
             dataStorage.open();
             break;
           }
