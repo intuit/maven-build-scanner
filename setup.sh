@@ -13,7 +13,7 @@ status "1/5 Starting local Mongo container"
 
 
 status "2/5 Building Maven extension"
-mvn install -q -DskipTests
+mvn install -q
 
 cp -v target/maven-build-scanner-1.0.0-SNAPSHOT-jar-with-dependencies.jar $(mvn help:evaluate -Dexpression=maven.home -DforceStdout -q)/lib/ext/
 
