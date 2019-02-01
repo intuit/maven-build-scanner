@@ -49,3 +49,8 @@ To create a scan for another application, do the following:
 You should see the following line in the Maven console output:
 
     Open http://localhost:3000/?projectId=com.intuit:maven-build-scanner&sessionId=60acc519-ff2a-4c06-b79a-2aa23c47c861 to view your Maven build scanner results to view your Maven build scanner results
+
+# License
+Maven Build Scanner is released under the Apache 2.0 licenses.
+It uses junit, org.eclipse.sisu.inject, and org.eclipse.sisu.plexus which is licensed under EPL 1.0.
+It uses jsr250-api which is licensed under CDDL.
