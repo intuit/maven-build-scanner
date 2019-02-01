@@ -6,6 +6,8 @@ jobs:
     steps:
       - checkout
       - run: mvn install -q
+      - store_test_results:
+          path: target/surefire-results
   build_server:
     working_directory: server
     docker:
