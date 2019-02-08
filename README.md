@@ -6,7 +6,7 @@
 
 ## What Is Maven Build Scanner?
 
-Maven Build Scanner is a tool that hooks into Maven builds and produces reports and charts that breakdown the time Maven spent running builds. These reports provide insights into your builds that can be used to tune it. 
+Maven Build Scanner is a tool that hooks into Maven builds and produces reports and charts that breakdown the time Maven spent. These reports provide insights into your builds that can be used to tune it. 
 
 It's been designed to work with large and complex builds; ones with hundreds of modules and plugins.
 
