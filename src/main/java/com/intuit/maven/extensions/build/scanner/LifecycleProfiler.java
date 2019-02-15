@@ -237,6 +237,8 @@ public class LifecycleProfiler extends AbstractEventSpy {
 
     out.add("-s " + request.getUserSettingsFile());
 
+    out.add("-T " + request.getDegreeOfConcurrency());
+
     request.getActiveProfiles().stream().map(profile -> "-P" + profile).forEach(out::add);
 
     request
