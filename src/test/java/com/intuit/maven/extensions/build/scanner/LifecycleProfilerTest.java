@@ -1,16 +1,5 @@
 package com.intuit.maven.extensions.build.scanner;
 
-import com.intuit.maven.extensions.build.scanner.infra.DataStorage;
-import org.apache.maven.execution.ExecutionEvent;
-import org.apache.maven.model.Plugin;
-import org.apache.maven.plugin.MojoExecution;
-import org.apache.maven.project.MavenProject;
-import org.junit.Test;
-
-import java.io.File;
-import java.util.Arrays;
-import java.util.List;
-
 import static org.apache.maven.execution.ExecutionEvent.Type.MojoFailed;
 import static org.apache.maven.execution.ExecutionEvent.Type.MojoStarted;
 import static org.apache.maven.execution.ExecutionEvent.Type.MojoSucceeded;
@@ -20,25 +9,32 @@ import static org.apache.maven.execution.ExecutionEvent.Type.ProjectSucceeded;
 import static org.apache.maven.execution.ExecutionEvent.Type.SessionEnded;
 import static org.apache.maven.execution.ExecutionEvent.Type.SessionStarted;
 
+import com.intuit.maven.extensions.build.scanner.infra.DataStorage;
+import java.io.File;
+import java.util.Arrays;
+import java.util.List;
+import org.apache.maven.execution.ExecutionEvent;
+import org.apache.maven.model.Plugin;
+import org.apache.maven.plugin.MojoExecution;
+import org.apache.maven.project.MavenProject;
+import org.junit.Test;
+
 public class LifecycleProfilerTest {
 
-    private final LifecycleProfiler sessionProfileRenderer =
-            new LifecycleProfiler(
-                    true,
-                    sessionProfile ->
-                            new DataStorage() {
-                                @Override
-                                public void open() {
-                                }
+  private final LifecycleProfiler sessionProfileRenderer =
+      new LifecycleProfiler(
+          true,
+          sessionProfile ->
+              new DataStorage() {
+                @Override
+                public void open() {}
 
-                                @Override
-                                public void checkPoint() {
-                                }
+                @Override
+                public void checkPoint() {}
 
-                                @Override
-                                public void close() {
-                                }
-                            });
+                @Override
+                public void close() {}
+              });
 
   private static MojoExecution mojoExecution(String test) {
     Plugin p = new Plugin();

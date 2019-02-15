@@ -1,5 +1,7 @@
 package com.intuit.maven.extensions.build.scanner;
 
+import static java.lang.System.currentTimeMillis;
+
 import com.intuit.maven.extensions.build.scanner.infra.DataStorage;
 import com.intuit.maven.extensions.build.scanner.infra.MongoDataStorage;
 import com.intuit.maven.extensions.build.scanner.model.Mojo;
@@ -8,18 +10,6 @@ import com.intuit.maven.extensions.build.scanner.model.Project;
 import com.intuit.maven.extensions.build.scanner.model.ProjectProfile;
 import com.intuit.maven.extensions.build.scanner.model.SessionProfile;
 import com.intuit.maven.extensions.build.scanner.model.Status;
-import org.apache.maven.eventspy.AbstractEventSpy;
-import org.apache.maven.execution.ExecutionEvent;
-import org.apache.maven.execution.MavenExecutionRequest;
-import org.apache.maven.execution.MavenSession;
-import org.apache.maven.execution.ProjectDependencyGraph;
-import org.apache.maven.plugin.MojoExecution;
-import org.apache.maven.project.MavenProject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.inject.Named;
-import javax.inject.Singleton;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -31,8 +21,17 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
-
-import static java.lang.System.currentTimeMillis;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import org.apache.maven.eventspy.AbstractEventSpy;
+import org.apache.maven.execution.ExecutionEvent;
+import org.apache.maven.execution.MavenExecutionRequest;
+import org.apache.maven.execution.MavenSession;
+import org.apache.maven.execution.ProjectDependencyGraph;
+import org.apache.maven.plugin.MojoExecution;
+import org.apache.maven.project.MavenProject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Named
 @Singleton
