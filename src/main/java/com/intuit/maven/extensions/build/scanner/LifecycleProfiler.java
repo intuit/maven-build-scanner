@@ -130,9 +130,15 @@ public class LifecycleProfiler extends AbstractEventSpy {
           }
         case SessionEnded:
           {
+            MavenSession session = executionEvent.getSession();
             sessionProfile.setEndTime(currentTimeMillis());
-            sessionProfile.setStatus(
-                sessionProfile.getProjectProfile(sessionProfile.getProject()).getStatus());
+
+            if (session.getResult().hasExceptions()) {
+              sessionProfile.setStatus(Status.FAILED);
+            } else {
+              sessionProfile.setStatus(Status.SUCCEEDED);
+            }
+
             dataStorage.close();
 
             LOGGER.info(
