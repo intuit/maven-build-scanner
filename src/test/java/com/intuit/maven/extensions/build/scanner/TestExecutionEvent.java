@@ -3,6 +3,7 @@ package com.intuit.maven.extensions.build.scanner;
 import java.util.Collections;
 import java.util.List;
 import org.apache.maven.execution.DefaultMavenExecutionRequest;
+import org.apache.maven.execution.DefaultMavenExecutionResult;
 import org.apache.maven.execution.ExecutionEvent;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.execution.ProjectDependencyGraph;
@@ -14,7 +15,8 @@ class TestExecutionEvent implements ExecutionEvent {
   private final MavenProject project;
   private final MojoExecution mojoExecution;
   private final MavenSession mavenSession =
-      new MavenSession(null, null, new DefaultMavenExecutionRequest(), null);
+      new MavenSession(
+          null, null, new DefaultMavenExecutionRequest(), new DefaultMavenExecutionResult());
 
   private final List<MavenProject> projects;
 
