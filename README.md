@@ -23,7 +23,6 @@ Start by install the following:
 * Java 8
 * Maven 3
 * Docker
-* Node + NPM
 
 Run:
 
@@ -31,10 +30,9 @@ Run:
 
 This will:
 
-1. Start up a Mongo database on Docker for storing data.
+1. Start up two docker containers (Mongo database and the web server).
 2. Create a JAR for the extension and copies it into your local Maven extensions folder (on MacOS this is something like `/usr/local/Cellar/maven/3.5.4/libexec/lib/ext`)
-3. Build and start the NPM web application for viewing your reports (listening on port 3000).
-4. Run a quick build scan on itself so you can try out the report.
+3. Run a quick build scan on itself so you can try out the report.
 
 You can then view your first scan at (http://localhost:3000). The page will show:
 
