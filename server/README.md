@@ -1,5 +1,8 @@
 Docker Container for App Server
 
+1. Edit mongo db connect string in /server/routes/index.js to the ip-adress your mongo db is running on:
+   - mongoose.connect("mongodb://<IP-ADRESS>:27017/build_scans", { useNewUrlParser: true });
+   
 1. build container from /server/Dockerfile:
    - docker build -t \<tagname> . --build-arg=HTTP_PROXY=\<http://yourproxy:port>  --build-arg=HTTPS_PROXY=\<http://yourproxy:port>
 
