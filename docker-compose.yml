@@ -1,0 +1,23 @@
+version: "3"
+services:
+  app:
+    container_name: maven-build-app
+    restart: always
+    build: ./server/
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    container_name: maven-build-db
+    volumes:
+      - data_db:/data/db
+      - config_db:/data/config_db
+    ports:
+      - "27017:27017"
+volumes:
+  data_db:
+  config_db:
+
+

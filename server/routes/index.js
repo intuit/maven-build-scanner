@@ -11,7 +11,9 @@ const ProjectSummary = mongoose.model("ProjectSummary");
 const SessionSummary = mongoose.model("SessionSummary");
 const SessionProfile = mongoose.model("SessionProfile");
 
-mongoose.connect("mongodb://localhost:27017/build_scans", { useNewUrlParser: true });
+// must match the service name in the docker-compose.yml
+mongoose.connect("mongodb://mongo/build_scans", { useNewUrlParser: true });
+//mongoose.connect("mongodb://localhost:27017/build_scans", { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 
 router.get("/", (req, res) => {
