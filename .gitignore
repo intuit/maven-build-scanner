@@ -57,3 +57,4 @@ data/journal/WiredTigerLog.0000000017
 data/journal/WiredTigerPreplog.0000000001
 data/journal/WiredTigerPreplog.0000000002
 .classpath
+mvn-home.txt
