@@ -24,9 +24,13 @@ Start by install the following:
 * Maven 3
 * Docker
 
-Run:
+On Linux/MacOs run:
 
     ./setup.sh
+
+On Windows (cmd.exe) run:
+
+    setup.bat
 
 This will:
 
@@ -43,8 +47,16 @@ You can then view your first scan at (http://localhost:3000). The page will show
 
 To create a scan for another application, do the following:
 
+On Linux/MacOs:
+
     cd your-app
     env MAVEN_BUILD_SCANNER=1 mvn install
+
+On Windows:
+
+    cd your-app
+    set MAVEN_BUILD_SCANNER 1 
+    mvn install
 
 You should see the following line in the Maven console output:
 
