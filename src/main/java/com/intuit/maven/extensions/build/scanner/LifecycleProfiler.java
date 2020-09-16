@@ -256,6 +256,14 @@ public class LifecycleProfiler extends AbstractEventSpy {
 
     out.addAll(request.getGoals());
 
+    request
+        .getSystemProperties()
+        .entrySet()
+        .stream()
+        .filter(e -> e.getKey().equals("env.MAVEN_CMD_LINE_ARGS"))
+        .map(e -> "allCmdLineArgs: {" + e.getValue() + "}")
+        .forEach(out::add);
+
     return String.join(" ", out);
   }
 
