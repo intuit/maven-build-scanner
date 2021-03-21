@@ -11,7 +11,11 @@ const ProjectSummary = mongoose.model("ProjectSummary");
 const SessionSummary = mongoose.model("SessionSummary");
 const SessionProfile = mongoose.model("SessionProfile");
 
-mongoose.connect("mongodb://localhost:27017/build_scans", { useNewUrlParser: true });
+const MONGO_DB_HOST = process.env.MONGO_DB_HOST || "localhost"
+const MONGO_DB_PORT = process.env.MONGO_DB_PORT || "27017"
+const MongoServerUrl = MONGO_DB_HOST + ":" + MONGO_DB_PORT;
+
+mongoose.connect("mongodb://"+MongoServerUrl+"/build_scans", { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 
 router.get("/", (req, res) => {
