@@ -1,0 +1,19 @@
+version: '3.2'
+
+services:
+    build-scan-db:
+        image: mongo
+        ports:
+            - "27017:27017"
+        volumes:
+        -   "./db:/data/db"
+    server:
+        build:
+            context: ./server
+        depends_on:
+            - build-scan-db
+        ports:
+            - "3000:3000"
+        environment:
+            - MONGO_DB_HOST=build-scan-db
+
