@@ -31,10 +31,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Clone
+      uses: actions/checkout@v2
+      
     - name: Package
       run: mvn package --batch-mode -DskipTests --file pom.xml
       
-    - uses: actions/upload-artifact@v2
+    - name: Uplod as artifact
+      uses: actions/upload-artifact@v2
       with:
         name: maven-build-scanner
         path: /home/runner/work/maven-build-scanner/maven-build-scanner/target/maven-build-scanner-1.0.0-SNAPSHOT-jar-with-dependencies.jar
