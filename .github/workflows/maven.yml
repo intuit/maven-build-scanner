@@ -26,8 +26,12 @@ jobs:
   
     - name: Test
       run: mvn test --batch-mode
-      
-    - name: Build with Maven
+
+  package:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Package
       run: mvn package --batch-mode -DskipTests --file pom.xml
       
     - uses: actions/upload-artifact@v2
