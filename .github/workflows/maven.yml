@@ -22,7 +22,7 @@ jobs:
         key: "test-cache"
         
     - name: Clone
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2.3.4
       
     - name: Test
       run: mvn test --batch-mode --no-snapshot-updates
@@ -43,7 +43,7 @@ jobs:
         key: "build-cache"
         
     - name: Clone
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2.3.4
       
     - name: Package
       run: mvn package --batch-mode -DskipTests --file pom.xml
