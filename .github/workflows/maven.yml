@@ -16,7 +16,7 @@ jobs:
         java-version: "11"
     
     - name: Cache test dependencies
-      uses: actions/cache@v2.1.4
+      uses: actions/cache@v2.1.5
       with:
         path: "~/.m2"
         key: "test-cache"
@@ -37,7 +37,7 @@ jobs:
         java-version: "11"
     
     - name: Cache build dependencies
-      uses: actions/cache@v2.1.4
+      uses: actions/cache@v2.1.5
       with:
         path: "~/.m2"
         key: "build-cache"
