@@ -1,0 +1,23 @@
+name: Node.js Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+        
+      - name: Configure Latest Node LTS
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          
+      - name: CI
+        run: npm ci
+        working-directory: ./server
+        
+      - name: Test
+        run: npm test
+        working-directory: ./server
