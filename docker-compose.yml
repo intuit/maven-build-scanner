@@ -2,7 +2,7 @@ version: '3.2'
 
 services:
     build-scan-db:
-        image: mongo
+        image: mongo:4.4.5-bionic
         ports:
             - "27017:27017"
         volumes:
@@ -16,4 +16,3 @@ services:
             - "3000:3000"
         environment:
             - MONGO_DB_HOST=build-scan-db
-
