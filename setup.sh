@@ -20,6 +20,7 @@ cp -v target/maven-build-scanner-1.0.0-SNAPSHOT-jar-with-dependencies.jar $(mvn 
 cd server
 
 status "3/5 Building web server"
+npm update
 npm install
 
 
