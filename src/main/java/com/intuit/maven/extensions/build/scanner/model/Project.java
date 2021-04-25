@@ -6,8 +6,8 @@ import lombok.Value;
 
 @Value
 public class Project {
-  @NonNull private final String groupId, artifactId;
-  @NonNull @EqualsAndHashCode.Exclude private final String version;
+  @NonNull String groupId, artifactId;
+  @NonNull @EqualsAndHashCode.Exclude String version;
 
   public String getId() {
     return groupId + ":" + artifactId;
