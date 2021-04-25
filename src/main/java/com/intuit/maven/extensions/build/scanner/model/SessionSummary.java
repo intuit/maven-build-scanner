@@ -8,11 +8,11 @@ import lombok.Value;
 @Value
 @Builder
 public class SessionSummary {
-  @NonNull private final String id;
-  @NonNull private final Project project;
-  private final long startTime, duration;
-  @NonNull private final String branch, username;
-  @NonNull private final List<String> goals;
-  private final String hostname;
-  @NonNull private final Status status;
+  @NonNull String id;
+  @NonNull Project project;
+  long startTime, duration;
+  @NonNull String branch, username;
+  @NonNull List<String> goals;
+  String hostname;
+  @NonNull Status status;
 }
