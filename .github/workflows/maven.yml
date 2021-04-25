@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ '8' ]
+        java: [ '9' ]
 
     steps:
     - name: Set up Java ${{ matrix.java }}
