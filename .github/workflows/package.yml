@@ -1,8 +1,7 @@
 
 name: Package into a JAR 
 
-on: 
-  push: [master]
+on: [push, pull_request]
 
 jobs:
   package:
