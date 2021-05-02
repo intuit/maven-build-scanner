@@ -1,8 +1,7 @@
 
 name: Package into a JAR 
 
-on: 
-  push: [master]
+on: [push, pull_request]
 
 jobs:
   package:
@@ -10,7 +9,7 @@ jobs:
 
     steps:
     - name: Set up JDK 1.11
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
         distribution: 'adopt'
         java-version: "11"
