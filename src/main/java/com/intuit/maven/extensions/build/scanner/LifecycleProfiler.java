@@ -223,7 +223,11 @@ public class LifecycleProfiler extends AbstractEventSpy {
       do {
         gitHead = new File(basedir, ".git/HEAD");
         basedir = basedir.getParentFile();
-      } while (!gitHead.exists());
+      } while (basedir != null && !gitHead.exists());
+
+      if (!gitHead.exists()) {
+          return "&lt;git not found&gt;";
+      }
 
       //noinspection OptionalGetWithoutIsPresent
       return Files.readAllLines(gitHead.toPath())
