@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.5
         
       - name: Configure Latest Node LTS
         uses: actions/setup-node@v2.4.1
