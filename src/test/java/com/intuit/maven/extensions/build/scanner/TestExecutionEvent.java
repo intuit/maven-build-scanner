@@ -11,6 +11,7 @@ import org.apache.maven.plugin.MojoExecution;
 import org.apache.maven.project.MavenProject;
 
 class TestExecutionEvent implements ExecutionEvent {
+  
   private final ExecutionEvent.Type type;
   private final MavenProject project;
   private final MojoExecution mojoExecution;
