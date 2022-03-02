@@ -28,7 +28,7 @@ jobs:
         key: "test-cache-${{ matrix.java }}-${{ matrix.os }}"
         
     - name: Clone
-      uses: actions/checkout@v2.4.0
+      uses: actions/checkout@v3
       
     - name: Test
       run: mvn test --batch-mode --no-snapshot-updates
