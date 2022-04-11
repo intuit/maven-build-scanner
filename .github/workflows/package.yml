@@ -27,7 +27,7 @@ jobs:
       run: mvn package --batch-mode -DskipTests --file pom.xml
       
     - name: Uplod as artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: maven-build-scanner
         path: /home/runner/work/maven-build-scanner/maven-build-scanner/target/maven-build-scanner-1.0.0-SNAPSHOT-jar-with-dependencies.jar
