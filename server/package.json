@@ -4,7 +4,7 @@
   "description": "A Maven extension that creates scans of builds that allow you to analyse and tune them. Inspired by [Gradle Build Scan](https://scans.gradle.com/s/h2ily574bqb4g).",
   "main": "app.js",
   "dependencies": {
-    "express": "^4.16.3",
+    "express": "^4.18.2",
     "mongoose": "^6.8.0"
   },
   "devDependencies": {
