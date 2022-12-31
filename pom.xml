@@ -104,7 +104,7 @@
         <repository>
             <id>github</id>
             <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/alexec/maven-build-scanner</url>
+            <url>https://maven.pkg.github.com/intuit/maven-build-scanner</url>
         </repository>
     </distributionManagement>
 </project>
