@@ -23,7 +23,6 @@ public class LifecycleProfilerTest {
 
   private final LifecycleProfiler sessionProfileRenderer =
       new LifecycleProfiler(
-          true,
           sessionProfile ->
               new DataStorage() {
                 @Override

@@ -54,7 +54,7 @@ curl -v $url -o $output
 Creating your first scan:
 
 ```bash
-env MAVEN_BUILD_SCANNER=1 mvn install
+mvn install
 ```
 
 You can then view your first scan at <http://localhost:3000>. The page will show:
@@ -63,13 +63,3 @@ You can then view your first scan at <http://localhost:3000>. The page will show
 * A pie chart showing the Maven plugins that took the longest.
 * A module-by-module breakdown of tasks.
 * Links to reports on previous builds.
-
-To create a scan for another application, do the following:
-
-    cd your-app
-    env MAVEN_BUILD_SCANNER=1 mvn install
-
-You should see the following line in the Maven console output:
-
-    Open http://localhost:3000/?projectId=com.intuit:maven-build-scanner&sessionId=60acc519-ff2a-4c06-b79a-2aa23c47c861 to view your Maven build scanner results to view your Maven build scanner results
-

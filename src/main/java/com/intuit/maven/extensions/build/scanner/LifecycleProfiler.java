@@ -40,18 +40,16 @@ public class LifecycleProfiler extends AbstractEventSpy {
   private final AtomicInteger threadIndexGenerator = new AtomicInteger();
   private final ThreadLocal<Integer> threadIndex =
       ThreadLocal.withInitial(threadIndexGenerator::incrementAndGet);
-  private final boolean enabled;
   private final Function<SessionProfile, DataStorage> dataStorageFactory;
   private DataStorage dataStorage;
   private SessionProfile sessionProfile;
   private long lastCheckPoint = currentTimeMillis();
 
   public LifecycleProfiler() {
-    this("1".equals(System.getenv("MAVEN_BUILD_SCANNER")), MongoDataStorage::new);
+    this(MongoDataStorage::new);
   }
 
-  LifecycleProfiler(boolean enabled, Function<SessionProfile, DataStorage> dataStorageFactory) {
-    this.enabled = enabled;
+  LifecycleProfiler(Function<SessionProfile, DataStorage> dataStorageFactory) {
     this.dataStorageFactory = dataStorageFactory;
   }
 
@@ -67,16 +65,12 @@ public class LifecycleProfiler extends AbstractEventSpy {
     try {
       return InetAddress.getLocalHost().getHostName();
     } catch (UnknownHostException e) {
-      return null;
+      return "unknown";
     }
   }
 
   @Override
   public synchronized void onEvent(Object event) {
-
-    if (!enabled) {
-      return;
-    }
 
     if (event instanceof ExecutionEvent) {
       ExecutionEvent executionEvent = (ExecutionEvent) event;
@@ -226,12 +220,11 @@ public class LifecycleProfiler extends AbstractEventSpy {
       } while (basedir != null && !gitHead.exists());
 
       if (!gitHead.exists()) {
-          return "&lt;git not found&gt;";
+        return "&lt;git not found&gt;";
       }
 
       //noinspection OptionalGetWithoutIsPresent
-      return Files.readAllLines(gitHead.toPath())
-          .stream()
+      return Files.readAllLines(gitHead.toPath()).stream()
           .map(line -> line.replaceFirst(".*/", ""))
           .findFirst()
           .get();
@@ -251,10 +244,7 @@ public class LifecycleProfiler extends AbstractEventSpy {
 
     request.getActiveProfiles().stream().map(profile -> "-P" + profile).forEach(out::add);
 
-    request
-        .getUserProperties()
-        .entrySet()
-        .stream()
+    request.getUserProperties().entrySet().stream()
         .map(entry -> "-D" + entry.getKey() + "=" + entry.getValue())
         .forEach(out::add);
 

@@ -5,8 +5,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
-@Value
-@Builder
+@Value @Builder
 public class SessionSummary {
   @NonNull String id;
   @NonNull Project project;

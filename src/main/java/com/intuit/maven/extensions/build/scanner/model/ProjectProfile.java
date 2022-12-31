@@ -17,8 +17,7 @@ public class ProjectProfile {
   }
 
   public MojoProfile getMojoProfile(Mojo mojo, String executionId, String goal) {
-    return mojoProfiles
-        .stream()
+    return mojoProfiles.stream()
         .filter(
             mojoProfile ->
                 mojoProfile.getMojo().equals(mojo)

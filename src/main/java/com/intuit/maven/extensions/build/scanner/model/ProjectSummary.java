@@ -3,8 +3,7 @@ package com.intuit.maven.extensions.build.scanner.model;
 import lombok.NonNull;
 import lombok.Value;
 
-@Value
-public class ProjectSummary {
+@Value public class ProjectSummary {
   @NonNull String groupId, artifactId;
   SessionSummary latestSessionSummary;
 

@@ -23,8 +23,7 @@ public class SessionProfile {
   }
 
   public ProjectProfile getProjectProfile(Project project) {
-    return projectProfiles
-        .stream()
+    return projectProfiles.stream()
         .filter(candidate -> candidate.getProject().equals(project))
         .findFirst()
         .get();

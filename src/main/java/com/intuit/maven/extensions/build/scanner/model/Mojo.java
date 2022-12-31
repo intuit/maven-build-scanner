@@ -4,8 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Value;
 
-@Value
-public class Mojo {
+@Value public class Mojo {
   @NonNull String groupId, artifactId;
   @NonNull @EqualsAndHashCode.Exclude String version;
 
