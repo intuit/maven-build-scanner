@@ -13,9 +13,13 @@ It's been designed to work with large and complex builds; ones with hundreds of 
 At Intuit it helped take a 40m build run by hundreds of developers every day and reduce it to 4m - a 10x reduction.
 [Learn more](https://medium.com/@alex_collins/10x-faster-maven-builds-at-intuit-5b7bb60c65e6)
 
-> (30m of engineering time) * (several hundred engineers) * (every working day for 5 years) * (some dollar amount) = (a LOT of money) 
+> (30m of engineering time) * (several hundred engineers) * (every working day for 5 years) * (some dollar amount) = (a LOT of money saved)
 
-[![Video](https://img.youtube.com/vi/2tB63Wer-4E/0.jpg)](https://www.youtube.com/watch?v=2tB63Wer-4E)
+![Screenshot](screenshot.png)
+
+Watch it in action:
+
+[![Video](video.png)](https://www.youtube.com/watch?v=2tB63Wer-4E)
 
 Inspired by [Gradle Build Scan](https://scans.gradle.com/s/h2ily574bqb4g).
 
