@@ -23,5 +23,6 @@ jobs:
         run: |
           cd server
           docker build . -t ghcr.io/intuit/maven-build-scanner-server:latest
+          docker tag ghcr.io/intuit/maven-build-scanner-server:latest alexcollinsintuit/maven-build-scanner-server:latest
       - name: Push the Docker image
         run: docker push ghcr.io/intuit/maven-build-scanner-server:latest
