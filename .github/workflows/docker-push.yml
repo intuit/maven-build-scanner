@@ -9,7 +9,7 @@ permissions:
 
 jobs:
 
-  build:
+  push:
 
     runs-on: ubuntu-latest
 
@@ -18,7 +18,7 @@ jobs:
       - name: Login
         run: echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
         env:
-          CR_PAT: ${{ env.CR_PAT }}
+          CR_PAT: ${{ secrets.CR_PAT }}
       - name: Build the Docker image
         run: |
           cd server
