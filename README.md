@@ -40,12 +40,44 @@ docker run -d --rm -p 27017:27017 --name mongo mongo
 docker run -d --rm -p 3000:3000 -e MONGO_DB_HOST=host.docker.internal --name maven-build-scanner-server alexcollinsintuit/maven-build-scanner-server
 ```
 
-Download the file name `jar-with-dependencies` from (
-Github)https://github.com/intuit/maven-build-scanner/packages/1761132].
+Edit `~/.m2/settings.xml` and add the following profile:
+
+```xml
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                      http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+    <activeProfiles>
+        <activeProfile>github</activeProfile>
+    </activeProfiles>
+
+    <profiles>
+        <profile>
+            <id>github</id>
+            <repositories>
+                <repository>
+                    <id>central</id>
+                    <url>https://repo1.maven.org/maven2</url>
+                </repository>
+                <repository>
+                    <id>github</id>
+                    <url>https://maven.pkg.github.com/intuit/maven-build-scanner</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+
+</settings>
+```
+
+Edit your `pom.xml` and add the following:
 
 ```bash
-# install Maven extension
-cp ~/Downloads/maven-build-scanner-*-jar-with-dependencies.jar $(mvn help:evaluate -Dexpression=maven.home -DforceStdout -q)/lib/ext/
 ```
 
 ```bash
