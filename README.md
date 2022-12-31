@@ -15,13 +15,13 @@ At Intuit it helped take a 40m build run by hundreds of developers every day and
 
 > (30m of engineering time) * (several hundred engineers) * (every working day for 5 years) * (some dollar amount) = (a LOT of money saved)
 
+### Screenshot
+
 ![Screenshot](screenshot.png)
 
-Watch it in action:
+### Video
 
 [![Video](video.png)](https://www.youtube.com/watch?v=2tB63Wer-4E)
-
-Inspired by [Gradle Build Scan](https://scans.gradle.com/s/h2ily574bqb4g).
 
 ## How Do I Use It?
 
@@ -58,20 +58,3 @@ You should see the following line in the Maven console output:
 
     Open http://localhost:3000/?projectId=com.intuit:maven-build-scanner&sessionId=60acc519-ff2a-4c06-b79a-2aa23c47c861 to view your Maven build scanner results to view your Maven build scanner results
 
-
-
-<!---
-Configure the maven plugin using [Maven CoreExtensions](https://maven.apache.org/ref/3.6.3/maven-embedder/core-extensions.html)
-   by adding add the following content to `~.mvn/extensions.xml`:
-
-```xml
-<extensions xmlns="http://maven.apache.org/EXTENSIONS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/EXTENSIONS/1.0.0 http://maven.apache.org/xsd/core-extensions-1.0.0.xsd">
-  <extension>
-    <groupId>com.intuit</groupId>
-    <artifactId>maven-build-scanner</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-  </extension>
-</extensions>
-```
--->
