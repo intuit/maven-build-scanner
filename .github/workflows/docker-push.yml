@@ -1,6 +1,11 @@
-name: Docker Image CI
+name: Docker Image CI Push
 
-on: [ push, pull_request ]
+on:
+  push:
+    branches: master
+
+permissions:
+  packages: write
 
 jobs:
 
@@ -14,3 +19,4 @@ jobs:
         run: |
           cd server
           docker build . -t ghcr.io/intuit/maven-build-scanner-server:latest
+          docker push ghcr.io/intuit/maven-build-scanner-server:latest

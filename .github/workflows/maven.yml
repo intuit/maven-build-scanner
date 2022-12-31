@@ -3,32 +3,32 @@
 
 name: Java CI with Maven
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        java: [ '8', '11', '16']
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        
+        java: [ '8', '11', '16' ]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+
     steps:
-    - name: Set up Java ${{ matrix.java }}
-      uses: actions/setup-java@v3
-      with:
-        distribution: 'adopt'
-        java-version: ${{ matrix.java }}
-        check-latest: true
-    
-    - name: Cache test dependencies
-      uses: actions/cache@v3
-      with:
-        path: "~/.m2"
-        key: "test-cache-${{ matrix.java }}-${{ matrix.os }}"
-        
-    - name: Clone
-      uses: actions/checkout@v3
-      
-    - name: Test
-      run: mvn test --batch-mode --no-snapshot-updates
+      - name: Set up Java ${{ matrix.java }}
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: ${{ matrix.java }}
+          check-latest: true
+
+      - name: Cache test dependencies
+        uses: actions/cache@v3
+        with:
+          path: "~/.m2"
+          key: "test-cache-${{ matrix.java }}-${{ matrix.os }}"
+
+      - name: Clone
+        uses: actions/checkout@v3
+
+      - name: Test
+        run: mvn test --batch-mode --no-snapshot-updates
