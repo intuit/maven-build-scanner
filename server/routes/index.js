@@ -19,8 +19,10 @@ mongoose.connect("mongodb://"+MongoServerUrl+"/build_scans", { useNewUrlParser: 
 mongoose.Promise = global.Promise;
 
 router.get("/", (req, res) => {
-	fs.readFile("index.html", (error, content) => res.write(content));
-
+	fs.readFile("index.html", (error, content) => {
+		res.write(content);
+		res.end()
+	});
 });
 
 router.get("/api/v1/project-summaries", (req, res) => {
