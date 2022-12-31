@@ -11,7 +11,7 @@ Maven Build Scanner is a tool that hooks into Maven builds and produces reports 
 It's been designed to work with large and complex builds; ones with hundreds of modules and plugins.
 
 At Intuit it helped take a 40m build run by hundreds of developers every day and reduce it to 4m - a 10x reduction.
-[Learn more](https://medium.com/@alex_collins/10x-faster-maven-builds-at-intuit-5b7bb60c65e6)
+[Read a blog post on the techniques that saved all this time](https://medium.com/@alex_collins/10x-faster-maven-builds-at-intuit-5b7bb60c65e6).
 
 > (30m of engineering time) * (several hundred engineers) * (every working day for 5 years) * (some dollar amount) = (a LOT of money saved)
 
