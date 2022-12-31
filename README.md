@@ -77,7 +77,19 @@ Edit `~/.m2/settings.xml` and add the following profile:
 
 Edit your `pom.xml` and add the following:
 
-```bash
+```xml
+<project>
+    <build>
+        <extensions>
+            <extension>
+                <groupId>com.intuit</groupId>
+                <artifactId>maven-build-scanner</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </extension>
+        </extensions>
+    </build>
+</project>
+
 ```
 
 ```bash
@@ -85,7 +97,7 @@ Edit your `pom.xml` and add the following:
 mvn install
 ```
 
-View your first scan at <http://localhost:3000>. The page will show:
+This will print out a URL to the report. The report will show:
 
 * A timeline of the build, so you can see how effective concurrency is being used.
 * A pie chart showing the Maven plugins that took the longest.
