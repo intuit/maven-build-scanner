@@ -15,8 +15,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Login
+        run: echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
       - name: Build the Docker image
         run: |
           cd server
           docker build . -t ghcr.io/intuit/maven-build-scanner-server:latest
-          docker push ghcr.io/intuit/maven-build-scanner-server:latest
+      - name: Push the Docker image
+        run: docker push ghcr.io/intuit/maven-build-scanner-server:latest
