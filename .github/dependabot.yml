@@ -13,7 +13,7 @@ updates:
     schedule:
       interval: "daily"
     ignore:
-      - dependency-name: "*slf4j"
+      - dependency-name: "*slf4j*"
 
   # Maintain dependencies for NodeJS
   - package-ecosystem: "npm"
