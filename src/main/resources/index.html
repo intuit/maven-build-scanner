@@ -255,7 +255,7 @@
             $("<li/>", {
                 class: "nav-item",
                 id: projectSummary.id,
-                html: "<a class='nav-link " + (projectId === projectSummary.id ? "active" : "") + "' href=\"?projectId=" + projectSummary.id + "\">" +
+                html: "<a class='nav-link " + (projectId === projectSummary.id ? "active" : "") + "' href=\"?projectId=" + projectSummary.groupId + ":" + projectSummary.artifactId + "\">" +
                 "<span data-feather='package'></span> " + projectSummary.artifactId + " <span class='session-summary'>" + parseAgo(projectSummary.latestSessionSummary.startTime) + " " + parseStatus(projectSummary.latestSessionSummary.status) + "</span></a>"
             }).appendTo("#nav");
         });
@@ -264,7 +264,7 @@
     });
 
     if (sessionId != null) {
-        $.getJSON("/api/v1/session-profiles/" + projectId.replace(":", "%3A") + "/" + sessionId + "?r=" + Math.random(), function (data) {
+        $.getJSON("/api/v1/session-profiles/" + sessionId + "?r=" + Math.random(), function (data) {
 
             $("<h1/>", {html: data.project.artifactId}).appendTo("main");
             $("<p/>", {

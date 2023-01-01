@@ -1,5 +1,4 @@
 /.idea
 /*.iml
 /db
-/server/node_modules
 /target

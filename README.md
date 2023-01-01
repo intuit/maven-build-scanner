@@ -29,13 +29,8 @@ Install the following:
 
 * Java
 * Maven
-* Docker
 
 ```bash
-# run a mongo database
-docker run -d --rm -p 27017:27017 --name mongo mongo
-# run the web server
-docker run -d --rm -p 3000:3000 -e MONGO_DB_HOST=host.docker.internal --name maven-build-scanner-server alexcollinsintuit/maven-build-scanner-server
 # Install the Maven extension:
 output="$(mvn help:evaluate -Dexpression=maven.home -DforceStdout -q)/lib/ext/maven-build-scanner-jar-with-dependencies.jar"
 curl -L https://github.com/intuit/maven-build-scanner/releases/download/v1.0.0/maven-build-scanner-jar-with-dependencies.jar -o $output
@@ -45,6 +40,12 @@ curl -L https://github.com/intuit/maven-build-scanner/releases/download/v1.0.0/m
 ```bash
 # Create your first scan:
 mvn install
+```
+
+```bash
+# Start the server to view your results:
+output="$(mvn help:evaluate -Dexpression=maven.home -DforceStdout -q)/lib/ext/maven-build-scanner-jar-with-dependencies.jar"
+java -jar $output
 ```
 
 This will print out a URL to the report. The report will show:
@@ -59,6 +60,4 @@ This will print out a URL to the report. The report will show:
 ```bash
 output="$(mvn help:evaluate -Dexpression=maven.home -DforceStdout -q)/lib/ext/maven-build-scanner-jar-with-dependencies.jar"
 rm -f $output
-docker rm --force maven-build-scanner-server
-docker rm --force mongo
 ```

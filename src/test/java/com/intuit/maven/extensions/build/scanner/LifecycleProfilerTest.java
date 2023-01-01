@@ -9,7 +9,7 @@ import static org.apache.maven.execution.ExecutionEvent.Type.ProjectSucceeded;
 import static org.apache.maven.execution.ExecutionEvent.Type.SessionEnded;
 import static org.apache.maven.execution.ExecutionEvent.Type.SessionStarted;
 
-import com.intuit.maven.extensions.build.scanner.infra.DataStorage;
+import com.intuit.maven.extensions.build.scanner.infra.DataWriter;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +24,7 @@ public class LifecycleProfilerTest {
   private final LifecycleProfiler sessionProfileRenderer =
       new LifecycleProfiler(
           sessionProfile ->
-              new DataStorage() {
+              new DataWriter() {
                 @Override
                 public void open() {}
 

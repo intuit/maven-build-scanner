@@ -1,21 +1,22 @@
 package com.intuit.maven.extensions.build.scanner.model;
 
-import java.util.ArrayList;
 import java.util.List;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Data
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class SessionProfile {
-  @NonNull private final String id;
-  @NonNull private final Project project;
-  @NonNull private final String command, hostname, username;
-  @NonNull private final List<String> goals;
-  private final String branch;
-  private final List<ProjectProfile> projectProfiles = new ArrayList<>();
-  private long startTime, endTime;
+  @NonNull private String id;
+  @NonNull private Project project;
+  @NonNull private String command, hostname, username;
+  @NonNull private List<String> goals;
+  @NonNull private String branch;
+  @NonNull private List<ProjectProfile> projectProfiles;
+  private long startTime, endTime, duration;
   @NonNull private Status status;
 
   public void addProjectProfile(ProjectProfile projectProfile) {
@@ -34,7 +35,8 @@ public class SessionProfile {
     this.endTime = startTime;
   }
 
-  public long getDuration() {
-    return endTime - startTime;
+  public void setEndTime(long endTime) {
+    this.endTime = endTime;
+    this.duration = endTime - startTime;
   }
 }

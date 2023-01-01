@@ -1,16 +1,19 @@
 package com.intuit.maven.extensions.build.scanner.model;
 
-import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ProjectProfile {
-  @NonNull private final Project project;
-  private final List<MojoProfile> mojoProfiles = new ArrayList<>();
+  @NonNull private Project project;
+  @NonNull private List<MojoProfile> mojoProfiles;
   @NonNull private Status status;
-  private long startTime, endTime;
+  private long startTime, endTime, duration;
 
   public void addMojoProfile(MojoProfile mojoProfile) {
     mojoProfiles.add(mojoProfile);
@@ -32,7 +35,8 @@ public class ProjectProfile {
     this.endTime = startTime;
   }
 
-  public long getDuration() {
-    return endTime - startTime;
+  public void setEndTime(long endTime) {
+    this.endTime = endTime;
+    this.duration = endTime - startTime;
   }
 }

@@ -1,13 +1,16 @@
 package com.intuit.maven.extensions.build.scanner.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.Value;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
-@Value public class Project {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Project {
   @NonNull String groupId, artifactId;
   @NonNull @EqualsAndHashCode.Exclude String version;
 
+  @JsonIgnore
   public String getId() {
     return groupId + ":" + artifactId;
   }

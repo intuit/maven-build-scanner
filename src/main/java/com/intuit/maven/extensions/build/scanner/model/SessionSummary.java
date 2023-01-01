@@ -1,11 +1,11 @@
 package com.intuit.maven.extensions.build.scanner.model;
 
 import java.util.List;
-import lombok.Builder;
-import lombok.NonNull;
-import lombok.Value;
+import lombok.*;
 
-@Value @Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class SessionSummary {
   @NonNull String id;
   @NonNull Project project;

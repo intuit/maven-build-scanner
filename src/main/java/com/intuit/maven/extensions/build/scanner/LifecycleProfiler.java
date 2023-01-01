@@ -2,14 +2,9 @@ package com.intuit.maven.extensions.build.scanner;
 
 import static java.lang.System.currentTimeMillis;
 
-import com.intuit.maven.extensions.build.scanner.infra.DataStorage;
-import com.intuit.maven.extensions.build.scanner.infra.MongoDataStorage;
-import com.intuit.maven.extensions.build.scanner.model.Mojo;
-import com.intuit.maven.extensions.build.scanner.model.MojoProfile;
-import com.intuit.maven.extensions.build.scanner.model.Project;
-import com.intuit.maven.extensions.build.scanner.model.ProjectProfile;
-import com.intuit.maven.extensions.build.scanner.model.SessionProfile;
-import com.intuit.maven.extensions.build.scanner.model.Status;
+import com.intuit.maven.extensions.build.scanner.infra.DataWriter;
+import com.intuit.maven.extensions.build.scanner.infra.DiskDataWriter;
+import com.intuit.maven.extensions.build.scanner.model.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -17,6 +12,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -40,16 +36,16 @@ public class LifecycleProfiler extends AbstractEventSpy {
   private final AtomicInteger threadIndexGenerator = new AtomicInteger();
   private final ThreadLocal<Integer> threadIndex =
       ThreadLocal.withInitial(threadIndexGenerator::incrementAndGet);
-  private final Function<SessionProfile, DataStorage> dataStorageFactory;
-  private DataStorage dataStorage;
+  private final Function<SessionProfile, DataWriter> dataStorageFactory;
+  private DataWriter dataWriter;
   private SessionProfile sessionProfile;
   private long lastCheckPoint = currentTimeMillis();
 
   public LifecycleProfiler() {
-    this(MongoDataStorage::new);
+    this(DiskDataWriter::new);
   }
 
-  LifecycleProfiler(Function<SessionProfile, DataStorage> dataStorageFactory) {
+  LifecycleProfiler(Function<SessionProfile, DataWriter> dataStorageFactory) {
     this.dataStorageFactory = dataStorageFactory;
   }
 
@@ -87,16 +83,19 @@ public class LifecycleProfiler extends AbstractEventSpy {
             String tag = getBranch(mavenProject);
 
             sessionProfile =
-                SessionProfile.builder()
-                    .id(UUID.randomUUID().toString())
-                    .project(project)
-                    .hostname(hostname())
-                    .username(System.getProperty("user.name"))
-                    .command(command(session.getRequest()))
-                    .goals(session.getGoals())
-                    .branch(tag)
-                    .status(Status.PENDING)
-                    .build();
+                new SessionProfile(
+                    UUID.randomUUID().toString(),
+                    project,
+                    command(session.getRequest()),
+                    hostname(),
+                    System.getProperty("user.name"),
+                    session.getGoals(),
+                    tag,
+                    new LinkedList<>(),
+                    0,
+                    0,
+                    0,
+                    Status.PENDING);
             sessionProfile.setStartTime(currentTimeMillis());
 
             LOGGER.info(
@@ -115,11 +114,11 @@ public class LifecycleProfiler extends AbstractEventSpy {
                           dependency.getArtifactId(),
                           dependency.getVersion());
                   sessionProfile.addProjectProfile(
-                      new ProjectProfile(childProject, Status.PENDING));
+                      new ProjectProfile(childProject, new ArrayList<>(), Status.PENDING, 0, 0, 0));
                 });
 
-            dataStorage = dataStorageFactory.apply(sessionProfile);
-            dataStorage.open();
+            dataWriter = dataStorageFactory.apply(sessionProfile);
+            dataWriter.open();
             break;
           }
         case SessionEnded:
@@ -133,15 +132,10 @@ public class LifecycleProfiler extends AbstractEventSpy {
               sessionProfile.setStatus(Status.SUCCEEDED);
             }
 
-            dataStorage.close();
+            dataWriter.close();
 
             LOGGER.info(
-                "Created Maven build scanner session profile "
-                    + sessionProfile.getProject().getId()
-                    + "#"
-                    + sessionProfile.getId());
-            LOGGER.info(
-                "Open http://localhost:3000/?projectId={}&sessionId={} to view your Maven build scanner results",
+                "Start-up the build scanner server (java -jar maven-build-scanner-jar-with-dependencies.jar) and then open http://localhost:3000/?projectId={}&sessionId={} to view your results",
                 sessionProfile.getProject().getId(),
                 sessionProfile.getId());
             break;
@@ -176,7 +170,10 @@ public class LifecycleProfiler extends AbstractEventSpy {
                     mojoExecution.getExecutionId(),
                     mojoExecution.getGoal(),
                     Status.PENDING,
-                    threadIndex.get());
+                    threadIndex.get(),
+                    0,
+                    0,
+                    0);
             mojoProfile.setStartTime(currentTimeMillis());
 
             projectProfile.addMojoProfile(mojoProfile);
@@ -204,7 +201,7 @@ public class LifecycleProfiler extends AbstractEventSpy {
   private void maybeCheckPoint() {
     if (currentTimeMillis() - lastCheckPoint > 30_0000) {
       LOGGER.info("Requesting check-point");
-      dataStorage.checkPoint();
+      dataWriter.checkPoint();
       lastCheckPoint = currentTimeMillis();
     }
   }

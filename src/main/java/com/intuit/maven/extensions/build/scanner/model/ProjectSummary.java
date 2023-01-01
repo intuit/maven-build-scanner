@@ -1,13 +1,14 @@
 package com.intuit.maven.extensions.build.scanner.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Value;
 
-@Value public class ProjectSummary {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProjectSummary {
   @NonNull String groupId, artifactId;
   SessionSummary latestSessionSummary;
-
-  public String getId() {
-    return groupId + ":" + artifactId;
-  }
 }
