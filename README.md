@@ -33,7 +33,7 @@ Install the following:
 ```bash
 # Install the Maven extension:
 output="$(mvn help:evaluate -Dexpression=maven.home -DforceStdout -q)/lib/ext/maven-build-scanner-jar-with-dependencies.jar"
-curl -L https://github.com/intuit/maven-build-scanner/releases/download/v1.0.0/maven-build-scanner-jar-with-dependencies.jar -o $output
+curl -L https://github.com/intuit/maven-build-scanner/releases/download/v2.0.0/maven-build-scanner-jar-with-dependencies.jar -o $output
 
 ```
 
