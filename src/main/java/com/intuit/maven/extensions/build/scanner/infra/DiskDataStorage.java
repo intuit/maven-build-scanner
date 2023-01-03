@@ -12,7 +12,8 @@ import java.util.List;
 import lombok.SneakyThrows;
 
 public class DiskDataStorage {
-  private static final String RESULTS = "target" + File.separator + "scans";
+  private static final String RESULTS =
+      System.getProperty("user.home") + File.separator + ".mvn" + File.separator + "scans";
   private static final String SESSION_SUMMARIES = RESULTS + File.separator + "session-summaries";
   private static final String PROJECT_SUMMARIES = RESULTS + File.separator + "project-summaries";
   private static final String SESSION_PROFILES = RESULTS + File.separator + "session-profiles";
