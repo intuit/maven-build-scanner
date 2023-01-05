@@ -134,8 +134,20 @@ public class LifecycleProfiler extends AbstractEventSpy {
 
             dataWriter.close();
 
+            String mavenHome = session.getSystemProperties().getProperty("maven.home");
+
+            LOGGER.info("To view your build scan, start-up the server:");
             LOGGER.info(
-                "Start-up the build scanner server (java -jar maven-build-scanner-jar-with-dependencies.jar) and then open http://localhost:3000/?projectId={}&sessionId={} to view your results",
+                "java -jar {}",
+                mavenHome
+                    + File.separator
+                    + "lib"
+                    + File.separator
+                    + "ext"
+                    + File.separator
+                    + "maven-build-scanner-jar-with-dependencies.jar");
+            LOGGER.info(
+                "Then open http://localhost:3000/?projectId={}&sessionId={}",
                 sessionProfile.getProject().getId(),
                 sessionProfile.getId());
             break;

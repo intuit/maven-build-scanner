@@ -19,16 +19,8 @@ Install:
 # install
 mvn package
 cp -v target/maven-build-scanner-jar-with-dependencies.jar $(mvn help:evaluate -Dexpression=maven.home -DforceStdout -q)/lib/ext/
-```
-
-```bash
 # create a scan
 mvn test
-```
-
-```bash
-# run server
-java -jar target/maven-build-scanner-jar-with-dependencies.jar
 ```
 
 Open UI on <http://localhost:3000>.
