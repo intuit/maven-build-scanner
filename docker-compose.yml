@@ -1,18 +1,9 @@
-version: '3.2'
+version: '3.9'
 
 services:
-    mongo:
-        image: mongo
-        ports:
-            - "27017:27017"
-        volumes:
-        -   "./db:/data/db"
     server:
-        build:
-            context: ./server
-        depends_on:
-            - mongo
-        ports:
-            - "3000:3000"
-        environment:
-            - MONGO_DB_HOST=mongo
+      build: .
+      ports:
+        - "3000:3000"
+      volumes:
+        - "${HOME}/.mvn:/root/.mvn"

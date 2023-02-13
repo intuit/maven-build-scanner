@@ -25,6 +25,14 @@ At Intuit it helped take a 40m build run by hundreds of developers every day and
 
 ## How Do I Use It?
 
+Using the build scanner requires three steps: 
+
+1. Integrating the build scanner as a [maven extension](https://maven.apache.org/guides/mini/guide-using-extensions.html)
+2. Running your build
+3. Running the server to browse the statistics
+
+### Alternative 1: Install directly
+
 Install the following:
 
 * Java
@@ -55,9 +63,65 @@ This will print out a URL to the report. The report will show:
 * A module-by-module breakdown of tasks.
 * Links to reports on previous builds.
 
-## Uninstall
+#### Uninstall
 
 ```bash
 output="$(mvn help:evaluate -Dexpression=maven.home -DforceStdout -q)/lib/ext/maven-build-scanner-jar-with-dependencies.jar"
 rm -f $output
+```
+
+### Alternative 2: Install using Extension mechanism and docker
+
+Install the following:
+
+* Java
+* Maven
+* Docker
+
+Clone the github repository and run
+```bash
+mvn install
+```
+
+to build the project and install into your local ```.m2``` diretory.
+
+Create a file ```.mvn/extensions.xml``` in the project you want to analyze:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<extensions>
+    <extension>
+        <groupId>com.intuit</groupId>
+        <artifactId>maven-build-scanner</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+    </extension>
+</extensions>
+```
+
+```bash
+# Create your first scan:
+mvn install
+```
+
+Use docker to launch the server:
+
+```bash
+# Create your first scan:
+docker-compose up -d
+```
+
+This will print launch the server listening on port `3000. The report will show:
+
+* A timeline of the build, so you can see how effective concurrency is being used.
+* A pie chart showing the Maven plugins that took the longest.
+* A module-by-module breakdown of tasks.
+* Links to reports on previous builds.
+
+#### Uninstall
+
+- Remove the entry in the `extensions.xml`
+- Remove the docker container:
+
+```bash
+docker compose stop && docker compose rm
 ```
