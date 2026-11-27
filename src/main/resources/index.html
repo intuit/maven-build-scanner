@@ -136,6 +136,16 @@
             color: #f78fb3;
         }
 
+        /* HTML tooltips of Google Charts set light colors inline, hence !important */
+        html[data-theme="dark"] .google-visualization-tooltip {
+            background-color: #2b2d31 !important;
+            border-color: #3a3d42 !important;
+        }
+
+        html[data-theme="dark"] .google-visualization-tooltip * {
+            color: #dee2e6 !important;
+        }
+
     </style>
 
     <!-- Theme: "auto" follows the OS/browser preference; an explicit choice is kept in localStorage.
@@ -477,6 +487,7 @@
                 var colors = chartColors();
                 chart.draw(data, {
                     title: 'Mojo Totals',
+                    tooltip: {isHtml: true},
                     backgroundColor: colors.background,
                     titleTextStyle: {color: colors.text},
                     legend: {textStyle: {color: colors.text}},
