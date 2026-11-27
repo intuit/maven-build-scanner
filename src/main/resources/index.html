@@ -121,8 +121,9 @@
             background-color: transparent;
         }
 
-        /* Google Timeline has no option for the axis label color */
-        html[data-theme="dark"] #timeline text {
+        /* Google Charts have no option for the timeline axis labels or the pie chart's "No data" text */
+        html[data-theme="dark"] #timeline text,
+        html[data-theme="dark"] #mojoPieChart text {
             fill: #dee2e6;
         }
 
