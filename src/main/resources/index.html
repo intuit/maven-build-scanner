@@ -82,7 +82,104 @@
             box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
         }
 
+        /*
+         * Dark theme (Bootstrap 4 has none, so override the few parts in use)
+         */
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
+        }
+
+        html[data-theme="dark"] body {
+            background-color: #1e1f22;
+            color: #dee2e6;
+        }
+
+        html[data-theme="dark"] a {
+            color: #6ea8fe;
+        }
+
+        html[data-theme="dark"] .bg-light {
+            background-color: #26282c !important;
+        }
+
+        html[data-theme="dark"] .sidebar {
+            box-shadow: inset -1px 0 0 rgba(255, 255, 255, .1);
+        }
+
+        html[data-theme="dark"] .sidebar .nav-link {
+            color: #ced4da;
+        }
+
+        html[data-theme="dark"] .sidebar .nav-link.active {
+            color: #6ea8fe;
+        }
+
+        html[data-theme="dark"] .table,
+        html[data-theme="dark"] .table .table {
+            color: inherit;
+            background-color: transparent;
+        }
+
+        /* Google Timeline has no option for the axis label color */
+        html[data-theme="dark"] #timeline text {
+            fill: #dee2e6;
+        }
+
+        html[data-theme="dark"] .table td,
+        html[data-theme="dark"] .table th {
+            border-color: #3a3d42;
+        }
+
+        html[data-theme="dark"] code {
+            color: #f78fb3;
+        }
+
     </style>
+
+    <!-- Theme: "auto" follows the OS/browser preference; an explicit choice is kept in localStorage.
+         Runs in <head> so the page does not flash light before turning dark. -->
+    <script>
+        var theme = (function () {
+            var modes = ["auto", "light", "dark"];
+            var media = window.matchMedia("(prefers-color-scheme: dark)");
+            var listeners = [];
+
+            function mode() {
+                try {
+                    var stored = localStorage.getItem("theme");
+                    return modes.indexOf(stored) >= 0 ? stored : "auto";
+                } catch (e) {
+                    return "auto";
+                }
+            }
+
+            function isDark() {
+                return mode() === "dark" || (mode() === "auto" && media.matches);
+            }
+
+            function apply() {
+                document.documentElement.setAttribute("data-theme", isDark() ? "dark" : "light");
+                listeners.forEach(function (listener) {
+                    listener();
+                });
+            }
+
+            function cycle() {
+                try {
+                    localStorage.setItem("theme", modes[(modes.indexOf(mode()) + 1) % modes.length]);
+                } catch (e) {
+                    // ponytail: without storage the choice simply is not persisted
+                }
+                apply();
+            }
+
+            media.addListener(apply);
+            apply();
+
+            return {mode: mode, isDark: isDark, cycle: cycle, onChange: listeners.push.bind(listeners)};
+        })();
+    </script>
 </head>
 
 <body>
@@ -90,6 +187,10 @@
     <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/">Maven Build Scans <span
             class="badge badge-default">beta</span></a>
     <ul class="navbar-nav px-3">
+        <li class="nav-item">
+            <button type="button" class="btn btn-sm btn-outline-light" id="theme-toggle"
+                    title="Color theme: Auto follows your system setting"></button>
+        </li>
     </ul>
 </nav>
 
@@ -140,6 +241,21 @@
 
 <script>
     var maxRecords = 20;
+
+    var themeLabels = {auto: "Theme: Auto", light: "Theme: Light", dark: "Theme: Dark"};
+    var themeToggle = $("#theme-toggle");
+    var updateThemeToggle = function () {
+        themeToggle.text(themeLabels[theme.mode()]);
+    };
+    themeToggle.on("click", theme.cycle);
+    theme.onChange(updateThemeToggle);
+    updateThemeToggle();
+
+    function chartColors() {
+        return theme.isDark()
+            ? {background: "#1e1f22", text: "#dee2e6"}
+            : {background: "#ffffff", text: "#212529"};
+    }
 
     function parseDuration(ms) {
         var ms = parseInt(ms);
@@ -329,7 +445,12 @@
                 dataTable.addColumn({type: 'date', id: 'Start'});
                 dataTable.addColumn({type: 'date', id: 'End'});
                 dataTable.addRows(mojoProfiles);
-                chart.draw(dataTable, {timeline: {singleColor: '#666'}});
+                var colors = chartColors();
+                chart.draw(dataTable, {
+                    backgroundColor: colors.background,
+                    alternatingRowStyle: !theme.isDark(),
+                    timeline: {singleColor: '#666'}
+                });
             };
 
             function drawMojoPieChart() {
@@ -347,11 +468,20 @@
 
                 var chart = new google.visualization.PieChart(document.getElementById('mojoPieChart'));
 
-                chart.draw(data, {title: 'Mojo Totals'});
+                var colors = chartColors();
+                chart.draw(data, {
+                    title: 'Mojo Totals',
+                    backgroundColor: colors.background,
+                    titleTextStyle: {color: colors.text},
+                    legend: {textStyle: {color: colors.text}},
+                    pieSliceBorderColor: colors.background
+                });
             }
 
             setTimeout(drawTimeline, 1000);
             setTimeout(drawMojoPieChart, 1000);
+            theme.onChange(drawTimeline);
+            theme.onChange(drawMojoPieChart);
 
 
             // table
