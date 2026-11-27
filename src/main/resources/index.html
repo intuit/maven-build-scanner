@@ -243,10 +243,15 @@
 <script>
     var maxRecords = 20;
 
-    var themeLabels = {auto: "Theme: Auto", light: "Theme: Light", dark: "Theme: Dark"};
+    var themeToggles = {
+        auto: {icon: "monitor", label: "Auto"},
+        light: {icon: "sun", label: "Light"},
+        dark: {icon: "moon", label: "Dark"}
+    };
     var themeToggle = $("#theme-toggle");
     var updateThemeToggle = function () {
-        themeToggle.text(themeLabels[theme.mode()]);
+        var toggle = themeToggles[theme.mode()];
+        themeToggle.html(feather.icons[toggle.icon].toSvg({width: 14, height: 14}) + " " + toggle.label);
     };
     themeToggle.on("click", theme.cycle);
     theme.onChange(updateThemeToggle);
