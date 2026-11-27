@@ -7,6 +7,7 @@ import com.intuit.maven.extensions.build.scanner.model.ProjectSummary;
 import com.intuit.maven.extensions.build.scanner.model.SessionProfile;
 import com.intuit.maven.extensions.build.scanner.model.SessionSummary;
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import lombok.SneakyThrows;
@@ -66,23 +67,36 @@ public class DiskDataStorage {
     MAPPER.writeValue(new File(path), sessionProfile);
   }
 
-  @SneakyThrows
   public List<ProjectSummary> listProjectSummaries() {
-    List<ProjectSummary> items = new LinkedList<>();
-    for (File file : new File(PROJECT_SUMMARIES).listFiles()) {
-      items.add(MAPPER.readValue(file, ProjectSummary.class));
+    return readAll(new File(PROJECT_SUMMARIES), ProjectSummary.class);
+  }
+
+  public List<SessionSummary> listSessionSummaries(String groupId, String artifactId) {
+    List<SessionSummary> items = new LinkedList<>();
+    for (SessionSummary item : readAll(new File(SESSION_SUMMARIES), SessionSummary.class)) {
+      if (item.getProject().getGroupId().equals(groupId)
+          && item.getProject().getArtifactId().equals(artifactId)) {
+        items.add(item);
+      }
     }
     return items;
   }
 
-  @SneakyThrows
-  public List<SessionSummary> listSessionSummaries(String groupId, String artifactId) {
-    List<SessionSummary> items = new LinkedList<>();
-    for (File file : new File(SESSION_SUMMARIES).listFiles()) {
-      SessionSummary item = MAPPER.readValue(file, SessionSummary.class);
-      if (item.getProject().getGroupId().equals(groupId)
-          && item.getProject().getArtifactId().equals(artifactId)) {
-        items.add(item);
+  /**
+   * Skips files that cannot be parsed, e.g. empty ones left behind by an interrupted build, so a
+   * single broken file does not make the whole list fail.
+   */
+  static <T> List<T> readAll(final File directory, final Class<T> type) {
+    final List<T> items = new LinkedList<>();
+    final File[] files = directory.listFiles();
+    if (files == null) {
+      return items;
+    }
+    for (final File file : files) {
+      try {
+        items.add(MAPPER.readValue(file, type));
+      } catch (IOException e) {
+        System.err.println("Skipping unreadable scan file " + file + ": " + e.getMessage());
       }
     }
     return items;
